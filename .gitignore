@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.venv311/
+
+# RAG data/cache
+.rag/
+
+# Logs and local env
+*.log
+.env
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node/build artifacts
+node_modules/
+dist/
+build/
+
+# Rust/build artifacts
+target/
