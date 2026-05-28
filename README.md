@@ -90,6 +90,8 @@ Scoring and citations:
 - Trigger indexing explicitly using `POST /v1/admin/reindex`.
 - Persist vectors under `RAG_DATA_PATH` so restarts do not lose the index.
 - Use scoped API keys (`query`, `sections`, `cite`, `admin:index`) for least-privilege access.
+- Choose embedding model with `RAG_EMBEDDING_MODEL` (default: `all-MiniLM-L6-v2`).
+- After changing embedding model, run a full reindex because old vectors are incompatible.
 
 ## 1) Quick start (Docker on local machine)
 
@@ -273,12 +275,14 @@ Recommended defaults for general usage:
 - `RAG_SOURCE_MODE=repo`
 - `RAG_SOURCE_DIR=/workspace/project` (Docker)
 - `RAG_EXCLUDE_DIRS=.git,.venv,.rag,node_modules,target,dist,build`
+- `RAG_EMBEDDING_MODEL=all-MiniLM-L6-v2`
 
 Source controls:
 
 - `RAG_SOURCE_MODE=repo|file|auto`
 - `RAG_SOURCE_DIR` for recursive repo indexing
 - `RAG_SOURCE_FILE` for single-file indexing
+- `RAG_EMBEDDING_MODEL` for embedding model selection
 - `RAG_EXCLUDE_DIRS` for folders to skip
 - `RAG_MAX_FILE_BYTES` to skip very large files
 - `RAG_STARTUP_REINDEX=0|1` to control indexing at backend startup (default `0`)

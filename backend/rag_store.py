@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import islice
+import logging
 
 import chromadb
 from chromadb.api.models.Collection import Collection
@@ -20,17 +21,37 @@ class RetrievedChunk:
     section: str
 
 
+logger = logging.getLogger("rag_backend")
+
+
 class RagStore:
     def __init__(self) -> None:
         settings = get_settings()
         self._settings = settings
         self._client = chromadb.PersistentClient(path=settings.data_path)
-        self._embedder = embedding_functions.DefaultEmbeddingFunction()
+        self._embedder = self._build_embedder(settings.embedding_model)
         self._collection: Collection = self._client.get_or_create_collection(
             name=settings.collection_name,
             embedding_function=self._embedder,
             metadata={"description": "Project RAG document store"},
         )
+
+    def _build_embedder(self, embedding_model: str):
+        model = (embedding_model or "").strip()
+        if not model or model.lower() in {"default", "all-minilm-l6-v2"}:
+            return embedding_functions.DefaultEmbeddingFunction()
+
+        # Custom models use sentence-transformers through Chroma's wrapper.
+        try:
+            logger.info("embedding_model=%s", model)
+            return embedding_functions.SentenceTransformerEmbeddingFunction(model_name=model)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(
+                "embedding_model_fallback model=%s reason=%s",
+                model,
+                str(exc),
+            )
+            return embedding_functions.DefaultEmbeddingFunction()
 
     @property
     def collection_name(self) -> str:

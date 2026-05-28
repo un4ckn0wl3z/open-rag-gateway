@@ -19,6 +19,7 @@ class Settings:
     backend_port: int
     data_path: str
     collection_name: str
+    embedding_model: str
     source_file: str
     source_dir: str
     source_mode: str
@@ -64,6 +65,7 @@ def get_settings() -> Settings:
         backend_port=int(os.getenv("RAG_BACKEND_PORT", "8000")),
         data_path=os.getenv("RAG_DATA_PATH", "./.rag/chroma"),
         collection_name=os.getenv("RAG_COLLECTION", "project_rag"),
+        embedding_model=os.getenv("RAG_EMBEDDING_MODEL", "all-MiniLM-L6-v2").strip(),
         source_file=os.getenv("RAG_SOURCE_FILE", "README.md"),
         source_dir=os.getenv("RAG_SOURCE_DIR", "."),
         source_mode=os.getenv("RAG_SOURCE_MODE", "repo").lower().strip(),
