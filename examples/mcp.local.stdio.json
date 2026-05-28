@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "project-rag-mcp": {
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_server.server"
+      ],
+      "cwd": ".",
+      "env": {
+        "MCP_TRANSPORT": "stdio",
+        "RAG_BACKEND_URL": "http://127.0.0.1:8000",
+        "RAG_MCP_SERVICE_KEY": "change-me-mcp"
+      }
+    }
+  }
+}
